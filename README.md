@@ -4,7 +4,7 @@
 
 [![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-brightgreen.svg)](https://github.com/matthiaszarzecki/MadeWithUnityBadges/graphs/commit-activity) [![Ask Me Anything !](https://img.shields.io/badge/Ask%20me-anything-1abc9c.svg)](http://www.matthiaszarzecki.com) [![License](https://img.shields.io/badge/License-CC-blue.svg)](https://en.wikipedia.org/wiki/Creative_Commons_license) [![Twitter Follow](https://img.shields.io/twitter/follow/icarustyler.svg?style=social&label=Follow)](https://twitter.com/IcarusTyler)
 
-Class & function that converts an integer from any base to any other base. Works with bases 1 to 160.
+Class & function that converts a non-decimal number from any base to any other base. Works with bases 1 to 160.
 
 
 The following numerals are used to encode numbers:
