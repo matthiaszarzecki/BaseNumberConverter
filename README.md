@@ -7,7 +7,7 @@
 Class & function that converts a non-decimal number from any base to any other base. Works with bases 1 to 160.
 
 
-### The following numerals are used to encode numbers:
+### The following characters are used to encode numbers:
 ```
 Bases 1...57, 59...63, 65...85:
 0...9, a...z, A...Z, "!", "#", "$", "%", "&", "(", ")", "*", "+", "-", ";", "<", "=", ">", "?", "@", "^", "_", "'", "{", "|", "}", "~"
