@@ -4,7 +4,22 @@
 
 [![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-brightgreen.svg)](https://github.com/matthiaszarzecki/MadeWithUnityBadges/graphs/commit-activity) [![Ask Me Anything !](https://img.shields.io/badge/Ask%20me-anything-1abc9c.svg)](http://www.matthiaszarzecki.com) [![License](https://img.shields.io/badge/License-CC-blue.svg)](https://en.wikipedia.org/wiki/Creative_Commons_license) [![Twitter Follow](https://img.shields.io/twitter/follow/icarustyler.svg?style=social&label=Follow)](https://twitter.com/IcarusTyler)
 
-Algorithm that converts a number from any base to any other base. Works with bases 1 to 160
+Class & functions that converts an integer from any base to any other base. Works with bases 1 to 160.
+
+The following alphabets are used to encode numbers:
+```
+Bases 1...57, 59...63, 65...85:
+0...9, a...z, A...Z, "!", "#", "$", "%", "&", "(", ")", "*", "+", "-", ";", "<", "=", ">", "?", "@", "^", "_", "'", "{", "|", "}", "~"
+
+Base 58:
+0...9, a...z, A...Z
+
+Base 64: 
+A...Z, a...z, 0...9, "+", "/"
+
+Bases 86...160:
+0...9, a...z, A...Z, ".", "-", ":", "+", "=", "^", "!", "/", "*", "?", "&", "<", ">", "(", ")", "[", "]", "{", "}", "@", "%", "$", "#", "α", "β", "γ", "δ", "ε", "ζ", "η", "θ", "ι", "κ", "λ", "μ", "ν", "ξ", "ο", "π", "ρ", "ς", "σ", "τ", "υ", "φ", "χ", "ψ", "ω", "グ", "ダ", "バ", "ム", "ヰ", "ァ", "ケ", "チ", "メ", "ヱ", "ヂ", "ヒ", "モ", "ヲ", "ィ", "コ", "ッ", "ビ", "ャ", "ン", "イ", "ゴ", "ツ", "ヤ", "ヴ", "ゥ", "サ", "ヅ", "フ", "ュ", "ヵ", "ウ", "ザ", "テ", "ブ", "ユ", "ヶ", "ェ", "シ", "デ", "ョ", "エ", "ト", "ヘ", "ヨ", "ォ", "ス", "ド", "ベ", "ラ", "オ"
+```
 
 # Examples
 
@@ -60,3 +75,6 @@ BaseConverter.convert("1263", fromBase: 10, toBase: 161)  //nil (outside base ra
 BaseConverter.convert("1263", fromBase: 0, toBase: 86)    //nil (outside base range)
 BaseConverter.convert("", fromBase: 3, toBase: 86)        //nil (faulty input number)
 ```
+
+# Sources
+https://www.calculand.com/unit-converter
