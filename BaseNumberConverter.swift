@@ -1,20 +1,88 @@
 import Foundation
 
-/**
- Converts an integer in any base >= 1 to any base between 1 and 160
- - parameter number: The number that is to be converted as string (so that non-numeral characters can be part of it). Number can be negative.
- - parameter fromBase: The base the number is converted from. Must be >= 1 and <= 160
- - parameter toBase: The base the number is converted to. Must be >= 1 and <= 160
- - returns: The converted number as string in the declared base. Nil if conversion fails
- */
-func convert(_ number: String, fromBase oldBase: Int = 10, toBase newBase: Int = 2) -> String? {
+class BaseConverter {
+    static private let numerals0to9 = getLetters(startUnicode: 0x0030, numberOfLetters: 10)
+    static private let lettersAtoZlowerCase = getLetters(startUnicode: 0x0061, numberOfLetters: 26)
+    static private let lettersAtoZUpperCase = getLetters(startUnicode: 0x0041, numberOfLetters: 26)
+    static private let lettersGreek = getLetters(startUnicode: 0x03B1, numberOfLetters: 25)
+    static private let lettersKatakana = ["グ", "ダ", "バ", "ム", "ヰ", "ァ", "ケ", "チ", "メ", "ヱ", "ヂ", "ヒ", "モ", "ヲ", "ィ", "コ", "ッ", "ビ", "ャ", "ン", "イ", "ゴ", "ツ", "ヤ", "ヴ", "ゥ", "サ", "ヅ", "フ", "ュ", "ヵ", "ウ", "ザ", "テ", "ブ", "ユ", "ヶ", "ェ", "シ", "デ", "ョ", "エ", "ト", "ヘ", "ヨ", "ォ", "ス", "ド", "ベ", "ラ", "オ"]
+    
+    static private let base58Numerals = numerals0to9 + lettersAtoZlowerCase + lettersAtoZUpperCase
+    static private let base64Numerals = lettersAtoZUpperCase + lettersAtoZlowerCase + numerals0to9 + ["+", "/"]
+    static private let base85Numerals = numerals0to9 + lettersAtoZUpperCase + lettersAtoZlowerCase + ["!", "#", "$", "%", "&", "(", ")", "*", "+", "-", ";", "<", "=", ">", "?", "@", "^", "_", "'", "{", "|", "}", "~"]
+    static private let base160Numerals = numerals0to9 + lettersAtoZlowerCase + lettersAtoZUpperCase + [".", "-", ":", "+", "=", "^", "!", "/", "*", "?", "&", "<", ">", "(", ")", "[", "]", "{", "}", "@", "%", "$", "#"] + lettersGreek + lettersKatakana
+    
+    /**
+     Converts an integer in any base >= 1 to any base between 1 and 160
+     - parameter number: The number that is to be converted as string (so that non-numeral characters can be part of it). Number can be negative.
+     - parameter fromBase: The base the number is converted from. Must be >= 1 and <= 160
+     - parameter toBase: The base the number is converted to. Must be >= 1 and <= 160
+     - returns: The converted number as string in the declared base. Nil if conversion fails
+     */
+    static func convert(_ number: String, fromBase oldBase: Int = 10, toBase newBase: Int = 2) -> String? {
+        //Check if parameters are within acceptable ranges
+        if number == "" || oldBase < 1 || oldBase > 160 || newBase < 1 || newBase > 160 {
+            return nil
+        }
+        
+        //"0" does not not require the full conversion-algorithm. Conversion can be stopped here
+        if number == "0" {
+            //Unless any of the bases are 58 or 64, in which "0" is a different character
+            if newBase != 58 && newBase != 64 && oldBase != 58 && oldBase != 64 {
+                if newBase == 1 {
+                    //Unless the new base is base1, where 0 cannot be displayed
+                    return nil
+                } else {
+                    return "0"
+                }
+            }
+        }
+        
+        var numberString = number
+        
+        //Non-base10 numbers need to be converted to base10 first in order to be calculated
+        if oldBase != 10 {
+            numberString = convertAnyBaseToBase10(number, fromBase: oldBase)
+        }
+        
+        //When converting to unary a different algorithm is used
+        if newBase == 1 {
+            let numberAsInt = Int(numberString)!
+            return convertFromBase10ToBase1(numberAsInt)
+        } else {
+            var isNegative = false
+            if number.first == "-" {
+                isNegative = true
+                numberString = String(numberString.dropFirst())
+            }
+            
+            let newNumberAsInt = Int(numberString)!
+            var remainder = newNumberAsInt
+            let baseNumerals = getNumerals(forBase: newBase)
+            var newBaseNumberAsString = ""
+            while remainder > 0 {
+                let iterationSolution = remainder / newBase
+                let currentRemainder = remainder % newBase
+                let currentCharacter = baseNumerals[currentRemainder]
+                newBaseNumberAsString = "\(currentCharacter)\(newBaseNumberAsString)"
+                remainder = iterationSolution
+            }
+            
+            if isNegative {
+                newBaseNumberAsString = "-\(newBaseNumberAsString)"
+            }
+            
+            return newBaseNumberAsString
+        }
+    }
+    
     /**
      Converts any number in any base from 1 to 160 to base10
      - parameters number: The number that is to be converted as string
      - parameters fromBase: The current base the number is in. Must be >= 1 and <= 160
      - returns: The number in base10 as String
      */
-    func convertAnyBaseToBase10(_ number: String, fromBase oldBase: Int = 2) -> String {
+    static private func convertAnyBaseToBase10(_ number: String, fromBase oldBase: Int = 2) -> String {
         //Convert from Unary (base1). In Unary number is the amount of characters used
         if oldBase == 1 {
             let convertedNumber = number.count
@@ -53,7 +121,7 @@ func convert(_ number: String, fromBase oldBase: Int = 10, toBase newBase: Int =
      - parameters character: The character that is used to display the number. Default is "|"
      - returns: A string displaying the entered number in entered character
      */
-    func convertFromBase10ToBase1(_ number: Int, character: String = "|") -> String {
+    static private func convertFromBase10ToBase1(_ number: Int, character: String = "|") -> String {
         var newNumber = ""
         for _ in 0..<number {
             newNumber += character
@@ -67,28 +135,7 @@ func convert(_ number: String, fromBase oldBase: Int = 10, toBase newBase: Int =
      - parameter forBase: The base that the numerals should be able to display. Must be > 1 and <= 160
      - returns: An array of single characters as strings that are used to assembled a number in the given base
      */
-    func getNumerals(forBase base: Int = 10) -> [String] {
-        func getLetters(startUnicode: Int, numberOfLetters: Int) -> [String] {
-            var letterArray = [String]()
-            for index in 0..<numberOfLetters {
-                let currentCharacter = Character(UnicodeScalar(startUnicode + index)!)
-                letterArray.append("\(currentCharacter)")
-            }
-            return letterArray
-        }
-        
-        let numerals0to9 = getLetters(startUnicode: 0x0030, numberOfLetters: 9)
-        let lettersAtoZlowerCase = getLetters(startUnicode: 0x0061, numberOfLetters: 26)
-        let lettersAtoZUpperCase = getLetters(startUnicode: 0x0041, numberOfLetters: 26)
-        let lettersGreek = getLetters(startUnicode: 0x03B1, numberOfLetters: 25)
-        let lettersKatakana = ["グ", "ダ", "バ", "ム", "ヰ", "ァ", "ケ", "チ", "メ", "ヱ", "ヂ", "ヒ", "モ", "ヲ", "ィ", "コ", "ッ", "ビ", "ャ", "ン", "イ", "ゴ", "ツ", "ヤ", "ヴ", "ゥ", "サ", "ヅ", "フ", "ュ", "ヵ", "ウ", "ザ", "テ", "ブ", "ユ", "ヶ", "ェ", "シ", "デ", "ョ", "エ", "ト", "ヘ", "ヨ", "ォ", "ス", "ド", "ベ", "ラ", "オ"]
-        
-        
-        let base58Numerals = numerals0to9 + lettersAtoZlowerCase + lettersAtoZUpperCase
-        let base64Numerals = lettersAtoZUpperCase + lettersAtoZlowerCase + numerals0to9 + ["+", "/"]
-        let base85Numerals = numerals0to9 + lettersAtoZUpperCase + lettersAtoZlowerCase + ["!", "#", "$", "%", "&", "(", ")", "*", "+", "-", ";", "<", "=", ">", "?", "@", "^", "_", "'", "{", "|", "}", "~"]
-        let base160Numerals = numerals0to9 + lettersAtoZlowerCase + lettersAtoZUpperCase + [".", "-", ":", "+", "=", "^", "!", "/", "*", "?", "&", "<", ">", "(", ")", "[", "]", "{", "}", "@", "%", "$", "#"] + lettersGreek + lettersKatakana
-        
+    static private func getNumerals(forBase base: Int = 10) -> [String] {
         switch base {
         case 1...57, 59...63, 65...85:
             //Get the numerals from base85 up to the needed amount
@@ -105,108 +152,18 @@ func convert(_ number: String, fromBase oldBase: Int = 10, toBase newBase: Int =
         }
     }
     
-    //Check if parameters are within acceptable ranges
-    if number == "" || oldBase < 1 || oldBase > 160 || newBase < 1 || newBase > 160 {
-        return nil
-    }
-    
-    //"0" does not not require the full conversion-algorithm. Conversion can be stopped here
-    if number == "0" {
-        //Unless any of the bases are 58 or 64, in which "0" is a different character
-        if newBase != 58 && newBase != 64 && oldBase != 58 && oldBase != 64 {
-            if newBase == 1 {
-                //Unless the new base is base1, where 0 cannot be displayed
-                return nil
-            } else {
-                return "0"
-            }
+    /**
+     Creates an array of letters as strings beginning at a specified unicode going forward
+     - parameters startUnicode: The letter to start at in hexcode, i.e. "0x0061" ("a")
+     - parameters numberOfLetters: The amount of letters that should be added to the array
+     - returns: An array of Strings with the letters
+     */
+    static private func getLetters(startUnicode: Int, numberOfLetters: Int) -> [String] {
+        var letterArray = [String]()
+        for index in 0..<numberOfLetters {
+            let currentCharacter = Character(UnicodeScalar(startUnicode + index)!)
+            letterArray.append("\(currentCharacter)")
         }
-    }
-    
-    var numberString = number
-    
-    //Non-base10 numbers need to be converted to base10 first in order to be calculated
-    if oldBase != 10 {
-        numberString = convertAnyBaseToBase10(number, fromBase: oldBase)
-    }
-    
-    //When converting to unary a different algorithm is used
-    if newBase == 1 {
-        let numberAsInt = Int(numberString)!
-        return convertFromBase10ToBase1(numberAsInt)
-    } else {
-        var isNegative = false
-        if number.first == "-" {
-            isNegative = true
-            numberString = String(numberString.dropFirst())
-        }
-        
-        let newNumberAsInt = Int(numberString)!
-        var remainder = newNumberAsInt
-        let baseNumerals = getNumerals(forBase: newBase)
-        var newBaseNumberAsString = ""
-        while remainder > 0 {
-            let iterationSolution = remainder / newBase
-            let currentRemainder = remainder % newBase
-            let currentCharacter = baseNumerals[currentRemainder]
-            newBaseNumberAsString = "\(currentCharacter)\(newBaseNumberAsString)"
-            remainder = iterationSolution
-        }
-        
-        if isNegative {
-            newBaseNumberAsString = "-\(newBaseNumberAsString)"
-        }
-        
-        return newBaseNumberAsString
+        return letterArray
     }
 }
-
-convert("0", fromBase: 2, toBase: 10)       //0
-convert("1", fromBase: 2, toBase: 10)       //1
-convert("10", fromBase: 2, toBase: 10)      //2
-convert("11", fromBase: 2, toBase: 10)      //3
-convert("100", fromBase: 2, toBase: 10)     //4
-
-convert("0", fromBase: 10, toBase: 2)       //0
-convert("1", fromBase: 10, toBase: 2)       //1
-convert("2", fromBase: 10, toBase: 2)       //10
-convert("11", fromBase: 10, toBase: 2)      //1011
-convert("12", fromBase: 10, toBase: 2)      //1100
-convert("13", fromBase: 10, toBase: 2)      //1101
-convert("-13", fromBase: 10, toBase: 2)     //-1101
-
-convert("0", fromBase: 10, toBase: 3)       //0
-convert("1", fromBase: 10, toBase: 3)       //1
-convert("2", fromBase: 10, toBase: 3)       //2
-convert("3", fromBase: 10, toBase: 3)       //10
-convert("-13", fromBase: 10, toBase: 3)     //-111
-
-convert("0", fromBase: 10, toBase: 36)      //0
-convert("1", fromBase: 10, toBase: 36)      //1
-convert("2", fromBase: 10, toBase: 36)      //2
-convert("3", fromBase: 10, toBase: 36)      //3
-convert("17", fromBase: 10, toBase: 36)     //H
-convert("22", fromBase: 10, toBase: 36)     //M
-convert("35", fromBase: 10, toBase: 36)     //Z
-convert("36", fromBase: 10, toBase: 36)     //10
-convert("37", fromBase: 10, toBase: 36)     //11
-convert("-37", fromBase: 10, toBase: 36)    //-11
-
-convert("-37", fromBase: 8, toBase: 4)      //-133
-
-convert("61", fromBase: 10, toBase: 62)     //z
-convert("62", fromBase: 10, toBase: 62)     //10
-convert("2", fromBase: 10, toBase: 2)       //10
-convert("2", fromBase: 10, toBase: 1)       //||
-convert("4", fromBase: 10, toBase: 1)       //||||
-
-convert("||||", fromBase: 1, toBase: 10)    //4
-convert("1263", fromBase: 10, toBase: 85)   //E<
-convert("84", fromBase: 10, toBase: 85)     //~
-
-convert("159", fromBase: 10, toBase: 160)   //ラ
-convert("160", fromBase: 10, toBase: 160)   //10
-
-convert("1263", fromBase: 10, toBase: 86)   //nil (outside base range)
-convert("1263", fromBase: 0, toBase: 86)    //nil (outside base range)
-
