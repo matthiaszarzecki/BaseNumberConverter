@@ -8,7 +8,7 @@ Algorithm that converts a number from any base to any other base. Works with bas
 
 # Examples
 
-BaseConverter.convert("0", fromBase: 2, toBase: 10)       //0
+```BaseConverter.convert("0", fromBase: 2, toBase: 10)       //0
 BaseConverter.convert("1", fromBase: 2, toBase: 10)       //1
 BaseConverter.convert("10", fromBase: 2, toBase: 10)      //2
 BaseConverter.convert("11", fromBase: 2, toBase: 10)      //3
@@ -57,4 +57,4 @@ BaseConverter.convert("160", fromBase: 10, toBase: 160)   //10
 
 BaseConverter.convert("1263", fromBase: 10, toBase: 161)  //nil (outside base range)
 BaseConverter.convert("1263", fromBase: 0, toBase: 86)    //nil (outside base range)
-BaseConverter.convert("", fromBase: 3, toBase: 86)        //nil (faulty input number)
+BaseConverter.convert("", fromBase: 3, toBase: 86)        //nil (faulty input number)```
