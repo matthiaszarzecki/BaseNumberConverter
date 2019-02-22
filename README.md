@@ -7,7 +7,7 @@
 Class & function that converts a non-decimal number from any base to any other base. Works with bases 1 to 160.
 
 
-The following numerals are used to encode numbers:
+### The following numerals are used to encode numbers:
 ```
 Bases 1...57, 59...63, 65...85:
 0...9, a...z, A...Z, "!", "#", "$", "%", "&", "(", ")", "*", "+", "-", ";", "<", "=", ">", "?", "@", "^", "_", "'", "{", "|", "}", "~"
@@ -22,7 +22,7 @@ Bases 86...160:
 0...9, a...z, A...Z, ".", "-", ":", "+", "=", "^", "!", "/", "*", "?", "&", "<", ">", "(", ")", "[", "]", "{", "}", "@", "%", "$", "#", "α", "β", "γ", "δ", "ε", "ζ", "η", "θ", "ι", "κ", "λ", "μ", "ν", "ξ", "ο", "π", "ρ", "ς", "σ", "τ", "υ", "φ", "χ", "ψ", "ω", "グ", "ダ", "バ", "ム", "ヰ", "ァ", "ケ", "チ", "メ", "ヱ", "ヂ", "ヒ", "モ", "ヲ", "ィ", "コ", "ッ", "ビ", "ャ", "ン", "イ", "ゴ", "ツ", "ヤ", "ヴ", "ゥ", "サ", "ヅ", "フ", "ュ", "ヵ", "ウ", "ザ", "テ", "ブ", "ユ", "ヶ", "ェ", "シ", "デ", "ョ", "エ", "ト", "ヘ", "ヨ", "ォ", "ス", "ド", "ベ", "ラ", "オ"
 ```
 
-# Examples
+### Examples
 
 ```
 BaseConverter.convert("0", fromBase: 2, toBase: 10)       //0
@@ -77,5 +77,5 @@ BaseConverter.convert("1263", fromBase: 0, toBase: 86)    //nil (outside base ra
 BaseConverter.convert("", fromBase: 3, toBase: 86)        //nil (faulty input number)
 ```
 
-# Sources
+### Sources
 https://www.calculand.com/unit-converter
