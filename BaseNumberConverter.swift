@@ -77,17 +77,12 @@ func convert(_ number: String, fromBase oldBase: Int = 10, toBase newBase: Int =
             return letterArray
         }
         
+        let numerals0to9 = getLetters(startUnicode: 0x0030, numberOfLetters: 9)
         let lettersAtoZlowerCase = getLetters(startUnicode: 0x0061, numberOfLetters: 26)
         let lettersAtoZUpperCase = getLetters(startUnicode: 0x0041, numberOfLetters: 26)
         let lettersGreek = getLetters(startUnicode: 0x03B1, numberOfLetters: 25)
         let lettersKatakana = ["グ", "ダ", "バ", "ム", "ヰ", "ァ", "ケ", "チ", "メ", "ヱ", "ヂ", "ヒ", "モ", "ヲ", "ィ", "コ", "ッ", "ビ", "ャ", "ン", "イ", "ゴ", "ツ", "ヤ", "ヴ", "ゥ", "サ", "ヅ", "フ", "ュ", "ヵ", "ウ", "ザ", "テ", "ブ", "ユ", "ヶ", "ェ", "シ", "デ", "ョ", "エ", "ト", "ヘ", "ヨ", "ォ", "ス", "ド", "ベ", "ラ", "オ"]
-        var numerals0to9: [String] {
-            var numeralArray = [String]()
-            for index in 0...9 {
-                numeralArray.append("\(index)")
-            }
-            return numeralArray
-        }
+        
         
         let base58Numerals = numerals0to9 + lettersAtoZlowerCase + lettersAtoZUpperCase
         let base64Numerals = lettersAtoZUpperCase + lettersAtoZlowerCase + numerals0to9 + ["+", "/"]
