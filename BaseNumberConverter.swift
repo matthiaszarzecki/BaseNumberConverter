@@ -45,7 +45,7 @@ class BaseConverter {
             numberString = convertAnyBaseToBase10(number, fromBase: oldBase)
         }
         
-        //When converting to unary a different algorithm is used
+        //When converting to base1 a different algorithm is used
         if newBase == 1 {
             let numberAsInt = Int(numberString)!
             return convertFromBase10ToBase1(numberAsInt)
@@ -83,7 +83,7 @@ class BaseConverter {
      - returns: The number in base10 as String
      */
     static private func convertAnyBaseToBase10(_ number: String, fromBase oldBase: Int = 2) -> String {
-        //Convert from Unary (base1). In Unary number is the amount of characters used
+        //Convert from base1. In base1 the number is the amount of characters used
         if oldBase == 1 {
             let convertedNumber = number.count
             return "\(convertedNumber)"
@@ -131,7 +131,8 @@ class BaseConverter {
     
     /**
      Returns an array with the correct numerals that are used to display a number in the specified base.
-     Base58 and Base64 have unique numerals. All other bases share the same numerals, up to the point where the base terminates
+     Bases up to 85 share the same numerals, up to the point where the base terminates. Base58 and Base64 have unique numerals.
+     Bases 86-160 use a different set of numerals.
      - parameter forBase: The base that the numerals should be able to display. Must be > 1 and <= 160
      - returns: An array of single characters as strings that are used to assembled a number in the given base
      */
