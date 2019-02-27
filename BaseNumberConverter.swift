@@ -83,7 +83,7 @@ class BaseConverter {
      - returns: The number in base10 as String
      */
     static private func convertAnyBaseToBase10(_ number: String, fromBase oldBase: Int = 2) -> String {
-        //Convert from base1. In base1 the number is the amount of characters used
+        //Convert from base1 to base10. In base1 the number is the amount of characters used
         if oldBase == 1 {
             let convertedNumber = number.count
             return "\(convertedNumber)"
