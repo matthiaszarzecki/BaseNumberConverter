@@ -10,7 +10,7 @@ Class & function that converts a non-decimal number from any base to any other b
 ### The following characters are used to encode numbers:
 ```
 Base 1:
-|
+"|"
 
 Bases 2...57, 59...63, 65...85:
 0...9, a...z, A...Z, "!", "#", "$", "%", "&", "(", ")", "*", "+", "-", ";", "<", "=", ">", "?", "@", "^", "_", "'", "{", "|", "}", "~"
