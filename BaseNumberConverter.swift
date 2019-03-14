@@ -1,16 +1,26 @@
 import Foundation
 
 class BaseConverter {
+    //Numeral Alphabet Elements
     static private let numerals0to9 = getLetters(startUnicode: 0x0030, numberOfLetters: 10)
-    static private let lettersAtoZlowerCase = getLetters(startUnicode: 0x0061, numberOfLetters: 26)
+    static private let lettersAtoZLowerCase = getLetters(startUnicode: 0x0061, numberOfLetters: 26)
     static private let lettersAtoZUpperCase = getLetters(startUnicode: 0x0041, numberOfLetters: 26)
     static private let lettersGreek = getLetters(startUnicode: 0x03B1, numberOfLetters: 25)
     static private let lettersKatakana = ["グ", "ダ", "バ", "ム", "ヰ", "ァ", "ケ", "チ", "メ", "ヱ", "ヂ", "ヒ", "モ", "ヲ", "ィ", "コ", "ッ", "ビ", "ャ", "ン", "イ", "ゴ", "ツ", "ヤ", "ヴ", "ゥ", "サ", "ヅ", "フ", "ュ", "ヵ", "ウ", "ザ", "テ", "ブ", "ユ", "ヶ", "ェ", "シ", "デ", "ョ", "エ", "ト", "ヘ", "ヨ", "ォ", "ス", "ド", "ベ", "ラ", "オ"]
     
-    static private let base58Numerals = numerals0to9 + lettersAtoZlowerCase + lettersAtoZUpperCase
-    static private let base64Numerals = lettersAtoZUpperCase + lettersAtoZlowerCase + numerals0to9 + ["+", "/"]
-    static private let base85Numerals = numerals0to9 + lettersAtoZUpperCase + lettersAtoZlowerCase + ["!", "#", "$", "%", "&", "(", ")", "*", "+", "-", ";", "<", "=", ">", "?", "@", "^", "_", "'", "{", "|", "}", "~"]
-    static private let base160Numerals = numerals0to9 + lettersAtoZlowerCase + lettersAtoZUpperCase + [".", "-", ":", "+", "=", "^", "!", "/", "*", "?", "&", "<", ">", "(", ")", "[", "]", "{", "}", "@", "%", "$", "#"] + lettersGreek + lettersKatakana
+    //Numeral Alphabet Elements for Base58 (does not use 0, l, I, O)
+    static private let numerals1to9 = getLetters(startUnicode: 0x0031, numberOfLetters: 9)
+    static private let lettersAtoKLowerCase = getLetters(startUnicode: 0x0061, numberOfLetters: 11)
+    static private let lettersMtoZLowerCase = getLetters(startUnicode: 0x006D, numberOfLetters: 14)
+    static private let lettersAtoHUpperCase = getLetters(startUnicode: 0x0041, numberOfLetters: 8)
+    static private let lettersJtoNUpperCase = getLetters(startUnicode: 0x004A, numberOfLetters: 5)
+    static private let lettersPtoZUpperCase = getLetters(startUnicode: 0x0050, numberOfLetters: 11)
+    
+    //Numeral Alphabets
+    static private let base58Numerals = numerals1to9 + lettersAtoKLowerCase + + lettersMtoZLowerCase + lettersAtoHUpperCase + lettersJtoNUpperCase + lettersPtoZUpperCase
+    static private let base64Numerals = lettersAtoZUpperCase + lettersAtoZLowerCase + numerals0to9 + ["+", "/"]
+    static private let base85Numerals = numerals0to9 + lettersAtoZUpperCase + lettersAtoZLowerCase + ["!", "#", "$", "%", "&", "(", ")", "*", "+", "-", ";", "<", "=", ">", "?", "@", "^", "_", "'", "{", "|", "}", "~"]
+    static private let base160Numerals = numerals0to9 + lettersAtoZLowerCase + lettersAtoZUpperCase + [".", "-", ":", "+", "=", "^", "!", "/", "*", "?", "&", "<", ">", "(", ")", "[", "]", "{", "}", "@", "%", "$", "#"] + lettersGreek + lettersKatakana
     
     /**
      Converts an integer in any base >= 1 to any base between 1 and 160
