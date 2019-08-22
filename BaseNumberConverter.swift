@@ -17,7 +17,7 @@ class BaseConverter {
     static private let lettersPtoZUpperCase = getLetters(startUnicode: 0x0050, numberOfLetters: 11)
     
     //Numeral Alphabets
-    static private let base58Numerals = numerals1to9 + lettersAtoKLowerCase + + lettersMtoZLowerCase + lettersAtoHUpperCase + lettersJtoNUpperCase + lettersPtoZUpperCase
+    static private let base58Numerals = numerals1to9 + lettersAtoKLowerCase + lettersMtoZLowerCase + lettersAtoHUpperCase + lettersJtoNUpperCase + lettersPtoZUpperCase
     static private let base64Numerals = lettersAtoZUpperCase + lettersAtoZLowerCase + numerals0to9 + ["+", "/"]
     static private let base85Numerals = numerals0to9 + lettersAtoZUpperCase + lettersAtoZLowerCase + ["!", "#", "$", "%", "&", "(", ")", "*", "+", "-", ";", "<", "=", ">", "?", "@", "^", "_", "'", "{", "|", "}", "~"]
     static private let base160Numerals = numerals0to9 + lettersAtoZLowerCase + lettersAtoZUpperCase + [".", "-", ":", "+", "=", "^", "!", "/", "*", "?", "&", "<", ">", "(", ")", "[", "]", "{", "}", "@", "%", "$", "#"] + lettersGreek + lettersKatakana
