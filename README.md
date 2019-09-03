@@ -71,6 +71,7 @@ BaseConverter.convert("1263", fromBase: 10, toBase: 85)   //E<
 BaseConverter.convert("84", fromBase: 10, toBase: 85)     //~
 
 BaseConverter.convert("159", fromBase: 10, toBase: 160)   //ラ
+BaseConverter.convert("ラ", fromBase: 160, toBase: 10)    //159
 BaseConverter.convert("160", fromBase: 10, toBase: 160)   //10
 
 BaseConverter.convert("1263", fromBase: 10, toBase: 161)  //nil (outside base range)
