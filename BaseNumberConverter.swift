@@ -23,10 +23,10 @@ class BaseConverter {
     static private let base160Numerals = numerals0to9 + lettersAtoZLowerCase + lettersAtoZUpperCase + [".", "-", ":", "+", "=", "^", "!", "/", "*", "?", "&", "<", ">", "(", ")", "[", "]", "{", "}", "@", "%", "$", "#"] + lettersGreek + lettersKatakana
     
     /**
-     Converts an integer in any base >= 1 to any base between 1 and 160
+     Converts an integer in any base >=1 to any base between 1 and 160
      - parameter number: The number that is to be converted as string (so that non-numeral characters can be part of it). Number can be negative.
-     - parameter fromBase: The base the number is converted from. Must be >= 1 and <= 160
-     - parameter toBase: The base the number is converted to. Must be >= 1 and <= 160
+     - parameter fromBase: The base the number is converted from. Must be >=1 and <=160
+     - parameter toBase: The base the number is converted to. Must be >=1 and <=160
      - returns: The converted number as string in the declared base. Nil if conversion fails
      */
     static func convert(_ number: String, fromBase oldBase: Int = 10, toBase newBase: Int = 2) -> String? {
@@ -85,11 +85,11 @@ class BaseConverter {
             return newBaseNumberAsString
         }
     }
-    
+
     /**
      Converts any number in any base from 1 to 160 to base10
      - parameters number: The number that is to be converted as string
-     - parameters fromBase: The current base the number is in. Must be >= 1 and <= 160
+     - parameters fromBase: The current base the number is in. Must be >=1 and <=160
      - returns: The number in base10 as String
      */
     static private func convertAnyBaseToBase10(_ number: String, fromBase oldBase: Int = 2) -> String {
@@ -109,10 +109,10 @@ class BaseConverter {
             isNegative = true
             numberString = String(numberString.dropFirst())
         }
-        
+
         var newNumber = 0
         for (index, character) in numberString.enumerated() {
-            let currentCharacterAsInt = Int(String(character))!
+            let currentCharacterAsInt = getNumberValueFrom(String(character), forBase: oldBase)
             let exponent = numberString.count - 1 - index
             let calculationFactor = Int(pow(Double(oldBase), Double(exponent)))
             newNumber += currentCharacterAsInt * calculationFactor
@@ -126,8 +126,16 @@ class BaseConverter {
     }
     
     /**
+     Returns the base10-value for a single character in any base >=2 and <=160
+     */
+    static private func getNumberValueFrom(_ character: String, forBase base: Int) -> Int {
+        let numerals = getNumerals(forBase: base)
+        return numerals.firstIndex(of: character)!
+    }
+    
+    /**
      Converts any number in base10 to base1
-     - parameters number: The number that is to be displayed. Needs to be >= 1
+     - parameters number: The number that is to be displayed. Needs to be >=1
      - parameters character: The character that is used to display the number. Default is "|"
      - returns: A string displaying the entered number in entered character
      */
